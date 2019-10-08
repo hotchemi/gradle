@@ -104,22 +104,23 @@ class RuntimeShadedJarCreator {
     private void createFatJar(final File outputJar, final Iterable<? extends File> files, final ProgressLogger progressLogger) {
         final File tmpFile = tempFileFor(outputJar);
 
-        IoActions.withResource(openJarOutputStream(tmpFile), new ErroringAction<ZipOutputStream>() {
-            @Override
-            protected void doExecute(ZipOutputStream jarOutputStream) throws Exception {
-                processFiles(jarOutputStream, files, new byte[BUFFER_SIZE], new HashSet<String>(), new LinkedHashMap<String, List<String>>(), progressLogger);
-                jarOutputStream.finish();
-            }
-        });
-
-        GFileUtils.moveFile(tmpFile, outputJar);
+        try {
+            IoActions.withResource(openJarOutputStream(tmpFile), new ErroringAction<ZipOutputStream>() {
+                @Override
+                protected void doExecute(ZipOutputStream jarOutputStream) throws Exception {
+                    processFiles(jarOutputStream, files, new byte[BUFFER_SIZE], new HashSet<String>(), new LinkedHashMap<String, List<String>>(), progressLogger);
+                    jarOutputStream.finish();
+                }
+            });
+            GFileUtils.moveFile(tmpFile, outputJar);
+        } finally {
+            tmpFile.delete();
+        }
     }
 
     private File tempFileFor(File outputJar) {
         try {
-            final File tmpFile = File.createTempFile(outputJar.getName(), ".tmp");
-            tmpFile.deleteOnExit();
-            return tmpFile;
+            return File.createTempFile(outputJar.getName(), ".tmp");
         } catch (IOException e) {
             throw UncheckedException.throwAsUncheckedException(e);
         }
