@@ -20,6 +20,7 @@ import org.gradle.api.JavaVersion
 
 import org.gradle.integtests.fixtures.AbstractIntegrationTest
 import org.gradle.integtests.fixtures.RepoScriptBlockUtil.gradlePluginRepositoryDefinition
+import org.gradle.integtests.fixtures.RepoScriptBlockUtil.kotlinEapRepositoryDefinition
 import org.gradle.integtests.fixtures.executer.ExecutionFailure
 import org.gradle.integtests.fixtures.executer.ExecutionResult
 import org.gradle.integtests.fixtures.executer.GradleContextualExecuter
@@ -55,6 +56,7 @@ abstract class AbstractKotlinIntegrationTest : AbstractIntegrationTest() {
             pluginManagement {
                 repositories {
                     ${gradlePluginRepositoryDefinition(GradleDsl.KOTLIN)}
+                    ${kotlinEapRepositoryDefinition(GradleDsl.KOTLIN)}
                 }
             }
         """.trimIndent()
@@ -64,6 +66,7 @@ abstract class AbstractKotlinIntegrationTest : AbstractIntegrationTest() {
         get() = """
             repositories {
                 ${gradlePluginRepositoryDefinition(GradleDsl.KOTLIN)}
+                ${kotlinEapRepositoryDefinition(GradleDsl.KOTLIN)}
             }
         """
 
