@@ -16,10 +16,11 @@
 
 package org.gradle.api.file
 
+import org.gradle.api.tasks.TasksWithInputsAndOutputs
 import org.gradle.integtests.fixtures.AbstractIntegrationSpec
 import spock.lang.Unroll
 
-class FilePropertyIntegrationTest extends AbstractIntegrationSpec {
+class FilePropertyIntegrationTest extends AbstractIntegrationSpec implements TasksWithInputsAndOutputs {
     def "can attach a calculated directory to task property"() {
         buildFile << """
             class SomeTask extends DefaultTask {
@@ -819,5 +820,23 @@ class SomeTask extends DefaultTask {
         failure.assertHasDescription("A problem was found with the configuration of task ':consumer' (type 'ConsumerTask').")
         failure.assertHasCause("No value has been specified for property 'bean.inputFile'.")
         failure.assertTasksExecuted(':consumer')
+    }
+
+    def "querying the value of a mapped task output file before the task has completed is deprecated"() {
+        taskTypeWithOutputFileProperty()
+        buildFile << """
+            task producer(type: FileProducer) {
+                output = layout.buildDir.file("text.out")
+            }
+            def prop = producer.output.map { it.asFile.file ? it.asFile.text : "(null)" }
+            println("prop = " + prop.get())
+        """
+
+        when:
+        executer.expectDeprecationWarning("Querying the value of a mapped task output file before the task has completed has been deprecated. This will fail with an error in Gradle 7.0.")
+        succeeds("producer")
+
+        then:
+        outputContains("prop = (null)")
     }
 }
