@@ -70,7 +70,7 @@ public abstract class AbstractProperty<T> extends AbstractMinimalProvider<T> imp
      */
     protected abstract String describeContents();
 
-    // Final - implement describeContents() instead
+    // This method is final - implement describeContents() instead
     @Override
     public final String toString() {
         if (displayName != null) {

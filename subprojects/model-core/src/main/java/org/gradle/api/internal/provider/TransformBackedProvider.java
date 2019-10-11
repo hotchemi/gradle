@@ -37,7 +37,7 @@ public class TransformBackedProvider<OUT, IN> extends AbstractMappingProvider<OU
 
     @Override
     public boolean isValueProducedByTask() {
-        // Need the content in order to transform it to produce the value of this provider, so if the content is built by tasks, the value is as well
+        // Need the content in order to transform it to produce the value of this provider, so if the content is built by tasks, the value is also built by tasks
         return !getProducerTasks().isEmpty();
     }
 
@@ -45,7 +45,7 @@ public class TransformBackedProvider<OUT, IN> extends AbstractMappingProvider<OU
     public OUT get() {
         for (Task producer : getProducerTasks()) {
             if (!producer.getState().getExecuted()) {
-                DeprecationLogger.nagUserOfDiscontinuedInvocation("Querying the value of a mapped task output file before the task has completed");
+                DeprecationLogger.nagUserOfDiscontinuedInvocation(String.format("Querying the mapped value of %s before %s has completed", getProvider(), producer));
                 break; // Only report one producer
             }
         }
