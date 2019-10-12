@@ -42,6 +42,11 @@ public abstract class AbstractMappingProvider<OUT, IN> extends AbstractMinimalPr
     }
 
     @Override
+    public boolean isValueProducedByTask() {
+        return provider.isValueProducedByTask();
+    }
+
+    @Override
     public void visitProducerTasks(Action<? super Task> visitor) {
         provider.visitProducerTasks(visitor);
     }

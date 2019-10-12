@@ -38,7 +38,7 @@ public class TransformBackedProvider<OUT, IN> extends AbstractMappingProvider<OU
     @Override
     public boolean isValueProducedByTask() {
         // Need the content in order to transform it to produce the value of this provider, so if the content is built by tasks, the value is also built by tasks
-        return !getProducerTasks().isEmpty();
+        return super.isValueProducedByTask() || !getProducerTasks().isEmpty();
     }
 
     @Override
