@@ -16,6 +16,7 @@
 
 package org.gradle.api.internal.tasks.testing;
 
+import org.gradle.api.Incubating;
 import org.gradle.api.tasks.testing.TestDescriptor;
 import org.gradle.internal.scan.UsedByScanPlugin;
 
