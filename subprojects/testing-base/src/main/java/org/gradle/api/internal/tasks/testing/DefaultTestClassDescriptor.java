@@ -35,21 +35,7 @@ public class DefaultTestClassDescriptor extends DefaultTestSuiteDescriptor {
 
     @Override
     public String getDisplayName() {
-        if (isInnerClass()) {
-            return getClassDisplayName();
-        }
-        if (isTopLevelClass() && getName().endsWith(getClassDisplayName())) {
-            return getName();
-        }
         return getClassDisplayName();
-    }
-
-    private boolean isTopLevelClass() {
-        return !isInnerClass();
-    }
-
-    private boolean isInnerClass() {
-        return getName().contains("$");
     }
 
     @Override
