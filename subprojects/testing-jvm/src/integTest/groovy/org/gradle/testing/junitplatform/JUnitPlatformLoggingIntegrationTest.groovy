@@ -94,33 +94,8 @@ class JUnitPlatformLoggingIntegrationTest extends JUnitPlatformIntegrationSpec  
         run("test")
 
         then:
-        outputContains("pkg.TopLevelClass > testMethod()")
-        outputContains("pkg.TopLevelClass > NestedClass > nestedTestMethod()")
-    }
-
-    def "should use display name even if display is the same as class name"() {
-        given:
-        file("src/test/java/pkg/TopLevelClass.java")  << """
-            package pkg;
-
-            import org.junit.jupiter.api.DisplayName;
-            import org.junit.jupiter.api.Nested;
-            import org.junit.jupiter.api.Test;
-
-            @DisplayName("TopLevelClass")
-            public class TopLevelClass {
-
-                @Test
-                public void testMethod() {
-                }
-            }
-         """
-
-        when:
-        run("test")
-
-        then:
         outputContains("TopLevelClass > testMethod()")
+        outputContains("TopLevelClass > NestedClass > nestedTestMethod()")
     }
 
 }
